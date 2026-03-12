@@ -1,7 +1,7 @@
 ﻿namespace FinManager.DataAccess.Models;
 
-public record Currency
+public record Currency : BaseEntity
 {
-    public int Id { get; init; }
     public string Name { get; init; }
+    public string Code { get; init; }
 }

@@ -1,12 +1,10 @@
-using FinManager.DataAccess.Configurations;
-using Microsoft.EntityFrameworkCore;
+using FinManager.WebApi.Configurations;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDataAccess(opt => opt.UseSqlServer(
-    builder.Configuration.GetConnectionString(Config.ConnectionString)));
+builder.ConfigureWebApp();
 
-builder.Services.AddOpenApi();
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

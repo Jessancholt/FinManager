@@ -1,13 +1,10 @@
-﻿using System.Collections;
+﻿namespace FinManager.DataAccess.Models;
 
-namespace FinManager.DataAccess.Models;
-
-public record User
+public record User : BaseEntity
 {
-    public Guid Id { get; init; }
     public string Name { get; init; }
     public string Email { get; init; }
     public string Password { get; init; }
-    public HashSet<Account> Accounts { get; init; }
-    public HashSet<Category> Categories { get; init; }
+    public ICollection<Account> Accounts { get; init; } = new HashSet<Account>();
+    public ICollection<Category> Categories { get; init; } = new HashSet<Category>();
 }
