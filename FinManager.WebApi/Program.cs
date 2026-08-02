@@ -1,8 +1,4 @@
-using FinManager.DataAccess;
-using FinManager.DataAccess.Models;
 using FinManager.WebApi.Configurations;
-using FinManager.WebApi.Exceptions;
-using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using Serilog;
 
@@ -21,5 +17,8 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
     app.MapScalarApiReference();
 }
+
+app.UseHttpsRedirection();
+app.MapEndpoints();
 
 app.Run();
