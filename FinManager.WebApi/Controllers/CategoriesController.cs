@@ -1,80 +1,37 @@
-using FinManager.DataAccess;
-using FinManager.DataAccess.Models;
 using FinManager.WebApi.ApiModels.Category;
-using FinManager.Shared.Exceptions;
+using FinManager.WebApi.Services;
+using FinManager.WebApi.Validators;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace FinManager.WebApi.Controllers;
 
+[Route("api/[controller]")]
 [ApiController]
-[Route("category")]
-public class CategoriesController(AppDbContext context) : ControllerBase
+public class CategoriesController(CategoryService categoryService) : ControllerBase
 {
     [HttpGet]
     public async Task<ActionResult<List<CategoryResponse>>> GetAll(CancellationToken ct)
-    {
-        var categories = await context.Categories
-            .Select(x => new CategoryResponse(x.Id, x.Name, x.UserId))
-            .ToListAsync(ct);
-
-        return categories;
-    }
+        => await categoryService.GetAll(ct);
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<CategoryResponse>> Get(Guid id, CancellationToken ct)
-    {
-        var category = await context.Categories
-            .Select(x => new CategoryResponse(x.Id, x.Name, x.UserId))
-            .FirstOrDefaultAsync(x => x.Id == id, ct)
-            ?? throw new NotFoundException("Category", id);
+    public async Task<ActionResult<CategoryResponse>> GetById(Guid id, CancellationToken ct)
+        => await categoryService.GetById(id, ct);
 
-        return category;
-    }
-
+    [TypeFilter(typeof(ValidationFilter<CategoryCreateRequest>))]
     [HttpPost]
     public async Task<IActionResult> Create(CategoryCreateRequest request, CancellationToken ct)
     {
-        await context.AddAsync(new Category
-        {
-            Name = request.Name,
-            UserId = request.UserId,
-        }, ct);
+        var newCategory = await categoryService.Create(request, ct);
 
-        await context.SaveChangesAsync(ct);
-
-        return NoContent();
+        return CreatedAtAction(nameof(GetById), new { id = newCategory.Id }, newCategory);
     }
 
+    [TypeFilter(typeof(ValidationFilter<CategoryUpdateRequest>))]
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(Guid id, CategoryUpdateRequest request, CancellationToken ct)
-    {
-        var category = await context.Categories
-            .FirstOrDefaultAsync(x => x.Id == id, ct)
-            ?? throw new NotFoundException("Category", id);
-
-        var updatedCategory = category with
-        {
-            Name = request.Name
-        };
-
-        context.Categories.Update(updatedCategory);
-
-        await context.SaveChangesAsync(ct);
-
-        return NoContent();
-    }
+    public async Task Update(Guid id, CategoryUpdateRequest request, CancellationToken ct)
+        => await categoryService.Update(id, request, ct);
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(Guid id, CancellationToken ct)
-    {
-        var category = await context.Categories
-            .FirstOrDefaultAsync(x => x.Id == id, ct)
-            ?? throw new NotFoundException("Category", id);
-
-        context.Remove(category);
-        await context.SaveChangesAsync(ct);
-
-        return NoContent();
-    }
+    public async Task Delete(Guid id, CancellationToken ct)
+        => await categoryService.Delete(id, ct);
 }

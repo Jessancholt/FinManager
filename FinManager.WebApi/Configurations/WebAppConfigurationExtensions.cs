@@ -1,6 +1,10 @@
 ﻿using FinManager.DataAccess.Configurations;
+using FinManager.WebApi.ApiModels.Category;
+using FinManager.WebApi.ApiModels.User;
 using FinManager.WebApi.Handlers;
+using FinManager.WebApi.Services;
 using FinManager.WebApi.Validators;
+using FinManager.WebApi.Validators.User;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -26,8 +30,16 @@ public static class WebAppConfigurationExtensions
             .ReadFrom.Configuration(builder.Configuration)
             .ReadFrom.Services(services));
 
-        builder.Services.AddControllers();
+        builder.Services.AddScoped<UserService>();
+        builder.Services.AddScoped<CategoryService>();
+
         builder.Services.AddValidatorsFromAssemblyContaining<UserRequestValidator>();
+
+        builder.Services.AddScoped<ValidationFilter<UserRequest>>();
+        builder.Services.AddScoped<ValidationFilter<CategoryCreateRequest>>();
+        builder.Services.AddScoped<ValidationFilter<CategoryUpdateRequest>>();
+
+        builder.Services.AddControllers();
 
         return builder;
     }

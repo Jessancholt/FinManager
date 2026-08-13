@@ -1,7 +1,7 @@
 ﻿using FinManager.WebApi.ApiModels.User;
 using FluentValidation;
 
-namespace FinManager.WebApi.Validators
+namespace FinManager.WebApi.Validators.User
 {
     public class UserRequestValidator : AbstractValidator<UserRequest>
     {
