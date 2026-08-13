@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace FinManager.WebApi.Exceptions;
+namespace FinManager.Shared.Exceptions;
 
 public sealed class BadRequestException : AppException
 {

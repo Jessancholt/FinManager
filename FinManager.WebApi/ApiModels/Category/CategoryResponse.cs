@@ -1,4 +1,4 @@
-﻿namespace FinManager.WebApi.ApiModels;
+﻿namespace FinManager.WebApi.ApiModels.Category;
 
 public record CategoryResponse(
     Guid Id,

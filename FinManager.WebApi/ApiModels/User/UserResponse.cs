@@ -1,4 +1,4 @@
-namespace FinManager.WebApi.ApiModels;
+namespace FinManager.WebApi.ApiModels.User;
 
 public record UserResponse(
     Guid Id,

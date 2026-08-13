@@ -1,4 +1,4 @@
-﻿using FinManager.WebApi.ApiModels;
+﻿using FinManager.WebApi.ApiModels.User;
 using FluentValidation;
 
 namespace FinManager.WebApi.Validators

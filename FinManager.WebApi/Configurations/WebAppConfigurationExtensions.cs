@@ -1,5 +1,4 @@
 ﻿using FinManager.DataAccess.Configurations;
-using FinManager.WebApi.Endpoints;
 using FinManager.WebApi.Handlers;
 using FinManager.WebApi.Validators;
 using FluentValidation;
@@ -27,28 +26,9 @@ public static class WebAppConfigurationExtensions
             .ReadFrom.Configuration(builder.Configuration)
             .ReadFrom.Services(services));
 
+        builder.Services.AddControllers();
         builder.Services.AddValidatorsFromAssemblyContaining<UserRequestValidator>();
-        builder.Services.AddEndpoints();
 
         return builder;
-    }
-
-    public static WebApplication MapEndpoints(this WebApplication app)
-    {
-        var endpoints = app.Services.GetRequiredService<IEnumerable<IEndpoint>>();
-
-        foreach (var endpoint in endpoints)
-        {
-            endpoint.MapEndpoints(app);
-        }
-
-        return app;
-    }
-
-    public static IServiceCollection AddEndpoints(this IServiceCollection services)
-    {
-        services.AddSingleton<IEndpoint, UserEndpoints>();
-        services.AddSingleton<IEndpoint, CategoryEndpoints>();
-        return services;
     }
 }

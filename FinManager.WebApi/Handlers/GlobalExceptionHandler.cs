@@ -1,4 +1,4 @@
-﻿using FinManager.WebApi.Exceptions;
+﻿using FinManager.Shared.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
