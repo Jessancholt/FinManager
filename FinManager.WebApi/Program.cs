@@ -1,11 +1,24 @@
-using FinManager.DataAccess.Configurations;
-using Microsoft.EntityFrameworkCore;
+using FinManager.WebApi.Configurations;
+using Scalar.AspNetCore;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDataAccess(opt => opt.UseSqlServer(
-    builder.Configuration.GetConnectionString(Config.ConnectionString)));
+builder.ConfigureWebApp();
 
 var app = builder.Build();
+
+app.UseExceptionHandler();
+
+app.UseSerilogRequestLogging();
+
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+    app.MapScalarApiReference();
+}
+
+app.UseHttpsRedirection();
+app.MapControllers();
 
 app.Run();

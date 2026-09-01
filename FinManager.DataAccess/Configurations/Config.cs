@@ -2,5 +2,5 @@
 
 public static class Config
 {
-    public const string ConnectionString = "ConnectionString";
+    public const string DefaultConnection = "DefaultConnection";
 }
